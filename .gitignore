@@ -1,0 +1,4 @@
+node_modules/
+coverage/
+.next/
+test/__snapshots__/
