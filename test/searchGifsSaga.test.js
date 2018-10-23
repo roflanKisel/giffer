@@ -1,145 +1,137 @@
 import { takeEvery, put, call } from 'redux-saga/effects';
 import GifsApi from '../services/gifs-api';
-import {
-  searchGifsSagas,
-  getAsyncTrendingGifs,
-  getAsyncSearchGifs,
-  getAsyncSearchGifById,
-} from '../ducks/searchGifs';
+import * as searchGifsDuck from '../ducks/searchGifs';
+import formatter from '../services/formatter';
 
 describe('searchGifsSagas', () => {
   it('should take all actions', () => {
-    const saga = searchGifsSagas[0]();
+    const saga = searchGifsDuck.searchGifsSagas[0]();
 
     expect(saga.next().value).toEqual(
-      takeEvery('GIF_TRENDING_REQUEST', getAsyncTrendingGifs)
+      takeEvery(searchGifsDuck.trendingSearchRequest().type, searchGifsDuck.getAsyncTrendingGifs)
     );
     expect(saga.next().value).toEqual(
-      takeEvery('GIF_SEARCH_BY_QUERY_REQUEST', getAsyncSearchGifs)
+      takeEvery(searchGifsDuck.searchByQueryRequest().type, searchGifsDuck.getAsyncSearchGifs)
     );
     expect(saga.next().value).toEqual(
-      takeEvery('GIF_SEARCH_BY_ID_REQUEST', getAsyncSearchGifById)
+      takeEvery(searchGifsDuck.searchByIdRequest().type, searchGifsDuck.getAsyncSearchGifById)
     );
   });
 
   describe('getAsyncTrendingGifs', () => {
+    let formatArraySpy;
+    const formattedArray = [{ test: 'formatted array' }];
+    
+    beforeAll(() => {
+      formatArraySpy = jest.spyOn(formatter, 'formatFixedHeightGifs').mockReturnValue(formattedArray);
+    });
+  
+    afterAll(() => {
+      formatArraySpy.mockRestore();
+    });
+
     it('should fetch gifs without errors', () => {
-      const saga = getAsyncTrendingGifs();
-      const requestAction = {
-        type: 'GIF_SEARCH_REQUEST',
-      };
-      const successAction = {
-        type: 'GIF_TRENDING_SUCCESS',
-        payload: [{ test: 'test1' }],
-      };
+      const saga = searchGifsDuck.getAsyncTrendingGifs();
       const spyOnApi = jest
         .spyOn(GifsApi, 'getTrendingGifs')
-        .mockResolvedValue([{ test: 'test1' }]);
+        .mockReturnThis();
   
-      expect(saga.next().value).toEqual(put(requestAction));
+      expect(saga.next().value).toEqual(put(searchGifsDuck.searchRequest()));
       expect(saga.next().value).toEqual(call(GifsApi.getTrendingGifs));
-      expect(saga.next([{ test: 'test1' }]).value).toEqual(put(successAction));
+      expect(saga.next().value).toEqual(put(searchGifsDuck.trendingSearchSuccess(formattedArray)));
   
       spyOnApi.mockRestore();
     });
 
     it('should handle error while fetching', () => {
-      const saga = getAsyncTrendingGifs();
-      const requestAction = {
-        type: 'GIF_SEARCH_REQUEST',
-      };
-      const failureAction = {
-        type: 'GIF_SEARCH_FAILURE',
-      };
+      const saga = searchGifsDuck.getAsyncTrendingGifs();
       const spyOnApi = jest
         .spyOn(GifsApi, 'getTrendingGifs')
         .mockRejectedValue(new Error('error fetching data'));
   
-      expect(saga.next().value).toEqual(put(requestAction));
+      expect(saga.next().value).toEqual(put(searchGifsDuck.searchRequest()));
       expect(saga.next().value).toEqual(call(GifsApi.getTrendingGifs));
-      expect(saga.throw(new Error('error fetching data')).value).toEqual(put(failureAction));
+      expect(saga.throw(new Error('error fetching data')).value).toEqual(put(searchGifsDuck.searchFailure()));
   
       spyOnApi.mockRestore();
     });
   });
 
   describe('getAsyncSearchGifs', () => {
+    let formatArraySpy;
+    const formattedArray = [{ test: 'formatted array 2' }];
+    const searchParams = { params: { searchQuery: 'search' } };
+
+    beforeAll(() => {
+      formatArraySpy = jest.spyOn(formatter, 'formatFixedHeightGifs').mockReturnValue(formattedArray);
+    });
+
+    afterAll(() => {
+      formatArraySpy.mockRestore();
+    });
+
     it('should fetch gifs without errors', () => {
-      const saga = getAsyncSearchGifs({ params: { searchQuery: 'search' } });
-      const requestAction = {
-        type: 'GIF_SEARCH_REQUEST',
-      };
-      const successAction = {
-        type: 'GIF_SEARCH_BY_QUERY_SUCCESS',
-        payload: [{ test: 'test2' }],
-      };
+      const saga = searchGifsDuck.getAsyncSearchGifs(searchParams);
       const spyOnApi = jest
         .spyOn(GifsApi, 'getGifsByQuery')
-        .mockResolvedValue([{ test: 'test2' }]);
+        .mockReturnThis();
 
-      expect(saga.next().value).toEqual(put(requestAction));
+      expect(saga.next().value).toEqual(put(searchGifsDuck.searchRequest()));
       expect(saga.next().value).toEqual(call(GifsApi.getGifsByQuery, 'search'));
-      expect(saga.next([{ test: 'test2' }]).value).toEqual(put(successAction));
+      expect(saga.next().value).toEqual(put(searchGifsDuck.searchByQuerySuccess(formattedArray)));
 
       spyOnApi.mockRestore();
     });
 
     it('should handle error while fetching', () => {
-      const saga = getAsyncSearchGifs({ params: { searchQuery: 'search' } });
-      const requestAction = {
-        type: 'GIF_SEARCH_REQUEST',
-      };
-      const failureAction = {
-        type: 'GIF_SEARCH_FAILURE',
-      };
+      const saga = searchGifsDuck.getAsyncSearchGifs(searchParams);
       const spyOnApi = jest
         .spyOn(GifsApi, 'getGifsByQuery')
         .mockRejectedValue(new Error('error fetching data'));
 
-      expect(saga.next().value).toEqual(put(requestAction));
+      expect(saga.next().value).toEqual(put(searchGifsDuck.searchRequest()));
       expect(saga.next().value).toEqual(call(GifsApi.getGifsByQuery, 'search'));
-      expect(saga.throw(new Error('error fetching data')).value).toEqual(put(failureAction));
+      expect(saga.throw(new Error('error fetching data')).value).toEqual(put(searchGifsDuck.searchFailure()));
 
       spyOnApi.mockRestore();
     });
   });
 
   describe('getAsyncSearchGifById', () => {
+    let formatGifSpy;
+    const searchParams = { params: { gifId: '123' } };
+    const formattedGif = { test: 'formatted gif' };
+
+    beforeAll(() => {
+      formatGifSpy = jest.spyOn(formatter, 'formatOriginalGif').mockReturnValue(formattedGif);
+    });
+
+    afterAll(() => {
+      formatGifSpy.mockRestore();
+    });
+
     it('should fetch gif by id without errors', () => {
-      const saga = getAsyncSearchGifById({ params: { gifId: '123' } });
-      const requestAction = {
-        type: 'GIF_SEARCH_REQUEST',
-      };
-      const successAction = {
-        type: 'GIF_SEARCH_BY_ID_SUCCESS',
-        payload: { test: 'test3' },
-      };
+      const saga = searchGifsDuck.getAsyncSearchGifById(searchParams);
       const spyOnApi = jest
         .spyOn(GifsApi, 'getGifById')
-        .mockResolvedValue({ test: 'test3' });
+        .mockReturnThis();
 
-      expect(saga.next().value).toEqual(put(requestAction));
+      expect(saga.next().value).toEqual(put(searchGifsDuck.searchRequest()));
       expect(saga.next().value).toEqual(call(GifsApi.getGifById, '123'));
-      expect(saga.next({ test: 'test3' }).value).toEqual(put(successAction));
+      expect(saga.next().value).toEqual(put(searchGifsDuck.searchByIdSuccess(formattedGif)));
 
       spyOnApi.mockRestore();
     });
 
     it('should handle error while fetching', () => {
-      const saga = getAsyncSearchGifById({ params: { gifId: '123' } });
-      const requestAction = {
-        type: 'GIF_SEARCH_REQUEST',
-      };
-      const failureAction = {
-        type: 'GIF_SEARCH_FAILURE',
-      };
+      const saga = searchGifsDuck.getAsyncSearchGifById(searchParams);
       const spyOnApi = jest
         .spyOn(GifsApi, 'getGifById')
         .mockRejectedValue(new Error('error fetching data'));
 
-      expect(saga.next().value).toEqual(put(requestAction));
+      expect(saga.next().value).toEqual(put(searchGifsDuck.searchRequest()));
       expect(saga.next().value).toEqual(call(GifsApi.getGifById, '123'));
-      expect(saga.throw(new Error('error fetching data')).value).toEqual(put(failureAction));
+      expect(saga.throw(new Error('error fetching data')).value).toEqual(put(searchGifsDuck.searchFailure()));
 
       spyOnApi.mockRestore();
     });

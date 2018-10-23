@@ -1,5 +1,6 @@
 import { takeEvery, call, put } from 'redux-saga/effects';
 import GifsApi from '../services/gifs-api';
+import formatter from '../services/formatter';
 
 // Actions
 const GIF_SEARCH_REQUEST = 'GIF_SEARCH_REQUEST';
@@ -12,7 +13,7 @@ const GIF_TRENDING_SUCCESS = 'GIF_TRENDING_SUCCESS';
 const GIF_SEARCH_BY_ID_SUCCESS = 'GIF_SEARCH_BY_ID_SUCCESS';
 
 const INITIAL_STATE = {
-  isLoading: false,
+  isLoading: true,
   isFailure: false,
   content: [],
   searchedGif: null,
@@ -26,7 +27,7 @@ export default (state = {}, action = {}) => {
     case GIF_SEARCH_BY_QUERY_SUCCESS:
       return { ...state, isLoading: false, content: action.payload };
     case GIF_SEARCH_FAILURE:
-      return { ...INITIAL_STATE, isFailure: true };
+      return { ...INITIAL_STATE, isFailure: true, isLoading: false };
     case GIF_TRENDING_SUCCESS:
       return { ...state, isLoading: false, content: action.payload };
     case GIF_SEARCH_BY_ID_SUCCESS:
@@ -80,7 +81,9 @@ export function* getAsyncTrendingGifs() {
     yield put(searchRequest());
     const trendingGifs = yield call(GifsApi.getTrendingGifs);
 
-    yield put(trendingSearchSuccess(trendingGifs));
+    yield put(
+      trendingSearchSuccess(formatter.formatFixedHeightGifs(trendingGifs))
+    );
   } catch (err) {
     yield put(searchFailure());
   }
@@ -91,7 +94,7 @@ export function* getAsyncSearchGifs(action) {
     yield put(searchRequest());
     const gifs = yield call(GifsApi.getGifsByQuery, action.params.searchQuery);
 
-    yield put(searchByQuerySuccess(gifs));
+    yield put(searchByQuerySuccess(formatter.formatFixedHeightGifs(gifs)));
   } catch (err) {
     yield put(searchFailure());
   }
@@ -102,7 +105,7 @@ export function* getAsyncSearchGifById(action) {
     yield put(searchRequest());
     const gif = yield call(GifsApi.getGifById, action.params.gifId);
 
-    yield put(searchByIdSuccess(gif));
+    yield put(searchByIdSuccess(formatter.formatOriginalGif(gif)));
   } catch (err) {
     yield put(searchFailure());
   }

@@ -16,8 +16,10 @@ const StyledNavbar = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
   background-color: #4578cc;
   width: 100%;
+  z-index: 0;
 `;
 
 const StyledTitle = styled.p`
@@ -32,6 +34,7 @@ const StyledTitle = styled.p`
 
 const StyledNavigation = styled.div`
   display: flex;
+  flex-wrap: wrap;
 `;
 
 export default Navbar;

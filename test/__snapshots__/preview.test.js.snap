@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Preview should renders correctly errors 1`] = `
+<preview__StyledImage
+  alt="alt"
+  height="120"
+  selected={true}
+  src="source"
+  width="240"
+/>
+`;

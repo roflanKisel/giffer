@@ -1,20 +1,22 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import { onlyUpdateForKeys } from 'recompose';
 import Navbar from './navbar';
 
-export const Layout = ({ children }) => (
-  <div>
-    <Navbar />
-    {children}
-  </div>
-);
+const withLayout = WrappedComponent =>
+  class Layout extends React.Component {
+    static getInitialProps(ctx) {
+      return WrappedComponent.getInitialProps
+        ? WrappedComponent.getInitialProps(ctx)
+        : {};
+    }
 
-Layout.propTypes = {
-  children: PropTypes.oneOfType([
-    PropTypes.arrayOf(PropTypes.node),
-    PropTypes.node,
-  ]).isRequired,
-};
+    render() {
+      return (
+        <div>
+          <Navbar />
+          <WrappedComponent {...this.props} />
+        </div>
+      );
+    }
+  };
 
-export default onlyUpdateForKeys(['children'])(Layout);
+export default withLayout;

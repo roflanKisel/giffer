@@ -1,13 +1,10 @@
 import React, { PureComponent } from 'react';
 import styled from 'styled-components';
-import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { bindActionCreators } from 'redux';
-import { searchByQueryRequest } from '../ducks/searchGifs';
 
 export class SearchLine extends PureComponent {
   static propTypes = {
-    dispatchSearchByQueryRequest: PropTypes.func,
+    handleSearchByQuery: PropTypes.func.isRequired,
   };
 
   state = {
@@ -22,9 +19,9 @@ export class SearchLine extends PureComponent {
 
   performSearch = event => {
     if (event.key === 'Enter') {
-      const { dispatchSearchByQueryRequest } = this.props;
+      const { handleSearchByQuery } = this.props;
 
-      dispatchSearchByQueryRequest({ searchQuery: this.state.inputText });
+      handleSearchByQuery({ searchQuery: this.state.inputText });
     }
   };
 
@@ -53,33 +50,19 @@ const StyledSearchLine = styled.div`
   justify-content: center;
   align-items: center;
   margin-bottom: 20px;
+  z-index: 0;
 `;
 
 const SearchLineWrapper = styled.div`
-  width: 60%;
-
-  @media (max-device-width: 500px) {
-    width: 90%;
-    /* overflow: hidden; */
-  }
+  width: 90%;
 `;
 
 const StyledInput = styled.input`
-  width: calc(99% - 10px);
+  width: calc(100% - 10px);
   height: 50px;
   font-size: 30px;
   padding-left: 10px;
   margin: 0px;
 `;
 
-const mapDispatchToProps = dispatch => ({
-  dispatchSearchByQueryRequest: bindActionCreators(
-    searchByQueryRequest,
-    dispatch
-  ),
-});
-
-export default connect(
-  null,
-  mapDispatchToProps
-)(SearchLine);
+export default SearchLine;

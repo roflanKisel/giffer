@@ -1,0 +1,17 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SearchLine SearchLine DUMB component should renders correctly errors 1`] = `
+<search-line__StyledSearchLine>
+  <search-line__SearchLineWrapper>
+    <h1>
+      Explore
+    </h1>
+    <search-line__StyledInput
+      onChange={[Function]}
+      onKeyPress={[Function]}
+      placeholder="Type something and press enter"
+      value=""
+    />
+  </search-line__SearchLineWrapper>
+</search-line__StyledSearchLine>
+`;

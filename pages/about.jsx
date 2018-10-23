@@ -1,13 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
-import Layout from '../components/layout';
+import withLayout from '../components/layout';
 
 export const About = () => (
-  <Layout>
-    <StyledParagraph>
-      This page was created by Alexander Kiseliov
-    </StyledParagraph>
-  </Layout>
+  <StyledParagraph>This page was created by Alexander Kiseliov</StyledParagraph>
 );
 
 const StyledParagraph = styled.p`
@@ -17,4 +13,4 @@ const StyledParagraph = styled.p`
   align-items: center;
 `;
 
-export default About;
+export default withLayout(About);

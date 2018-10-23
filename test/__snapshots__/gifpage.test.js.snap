@@ -1,0 +1,41 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Gifpage Gifpage DUMB component should renders correctly when failed 1`] = `
+<lifecycle(Component)
+  gif={null}
+  gifId="1"
+  handleSearchById={[Function]}
+  isFailure={true}
+  isLoading={false}
+/>
+`;
+
+exports[`Gifpage Gifpage DUMB component should renders correctly when loading 1`] = `
+<lifecycle(Component)
+  gif={null}
+  gifId="1"
+  handleSearchById={[Function]}
+  isFailure={false}
+  isLoading={true}
+/>
+`;
+
+exports[`Gifpage Gifpage DUMB component should renders correctly when not failed 1`] = `
+<lifecycle(Component)
+  gif={
+    Object {
+      "images": Object {
+        "original": Object {
+          "height": "250",
+          "url": "url",
+          "width": "200",
+        },
+      },
+    }
+  }
+  gifId="1"
+  handleSearchById={[Function]}
+  isFailure={false}
+  isLoading={false}
+/>
+`;

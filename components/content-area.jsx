@@ -1,27 +1,22 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { lifecycle, onlyUpdateForKeys, compose } from 'recompose';
-import { bindActionCreators } from 'redux';
+import { lifecycle, onlyUpdateForKeys } from 'recompose';
 import styled from 'styled-components';
-import Preview from './preview';
+import HoverPreview from './hover-preview';
+import withLoadingStatus from './loading-status';
 
-import { trendingSearchRequest } from '../ducks/searchGifs';
-
-export const ContentArea = ({ contentList, isLoading, isFailure }) => (
+export const ContentArea = ({ contentList }) => (
   <ContentAreaWrapper>
-    {isLoading && <LoadingInfo>Loading...</LoadingInfo>}
-    {!isLoading && isFailure && <LoadingInfo>Error fetching data</LoadingInfo>}
-    {!isLoading &&
-      !isFailure &&
+    {contentList &&
       contentList.map(content => (
-        <Preview
+        <HoverPreview
           key={content.id}
           id={content.id}
-          src={content.images.fixed_height.url}
-          preview={content.images.fixed_height_still.url}
-          width={content.images.fixed_height.width}
-          height={content.images.fixed_height.height}
+          src={content.url}
+          preview={content.previewUrl}
+          width={content.width}
+          height={content.height}
+          title={content.title}
         />
       ))}
   </ContentAreaWrapper>
@@ -32,49 +27,34 @@ const ContentAreaWrapper = styled.div`
   justify-content: space-around;
   flex-wrap: wrap;
   width: 80%;
-`;
-
-const LoadingInfo = styled.p`
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  z-index: 1;
 `;
 
 ContentArea.propTypes = {
-  contentList: PropTypes.arrayOf(PropTypes.object).isRequired,
-  isLoading: PropTypes.bool.isRequired,
-  isFailure: PropTypes.bool.isRequired,
+  contentList: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string,
+      url: PropTypes.string,
+      previewUrl: PropTypes.string,
+      width: PropTypes.string,
+      height: PropTypes.string,
+      title: PropTypes.string,
+    })
+  ).isRequired,
 };
+
+const ExtendedContentArea = onlyUpdateForKeys(['contentList'])(ContentArea);
+
+export const ContentAreaWithLoadingStatus = withLoadingStatus(
+  ExtendedContentArea
+);
 
 export const ContentAreaWithMounting = lifecycle({
   componentDidMount() {
-    const { dispatchTrendingSearchRequest } = this.props;
+    const { handleTrendingSearch } = this.props;
 
-    console.log('content area')
-
-    dispatchTrendingSearchRequest();
+    handleTrendingSearch();
   },
-})(ContentArea);
+})(ContentAreaWithLoadingStatus);
 
-const ExtendedContentArea = compose(
-  onlyUpdateForKeys(['contentList', 'isLoading', 'isFailure'])
-)(ContentAreaWithMounting);
-
-const mapStateToProps = state => ({
-  isLoading: state.gifsData.isLoading,
-  isFailure: state.gifsData.isFailure,
-  contentList: state.gifsData.content,
-});
-
-const mapDispatchToProps = dispatch => ({
-  dispatchTrendingSearchRequest: bindActionCreators(
-    trendingSearchRequest,
-    dispatch
-  ),
-});
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(ExtendedContentArea);
+export default ContentAreaWithMounting;

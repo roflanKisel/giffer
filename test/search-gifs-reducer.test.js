@@ -2,7 +2,7 @@ import reducer from '../ducks/searchGifs';
 
 describe('SearchGifs Reducer', () => {
   const initialState = {
-    isLoading: false,
+    isLoading: true,
     isFailure: false,
     content: [],
     searchedGif: null,
@@ -31,6 +31,7 @@ describe('SearchGifs Reducer', () => {
 
     expect(reducer(initialState, successAction)).toEqual({
       ...initialState,
+      isLoading: false,
       content: [{ test: 'test1' }],
     });
   });
@@ -40,7 +41,11 @@ describe('SearchGifs Reducer', () => {
       type: 'GIF_SEARCH_FAILURE',
     };
 
-    expect(reducer(initialState, failureAction)).toEqual({ ...initialState, isFailure: true });
+    expect(reducer(initialState, failureAction)).toEqual({
+      ...initialState,
+      isFailure: true,
+      isLoading: false,
+    });
   });
 
   it('should handle GIF_TRENDING_SUCCESS', () => {
@@ -51,6 +56,7 @@ describe('SearchGifs Reducer', () => {
 
     expect(reducer(initialState, successAction)).toEqual({
       ...initialState,
+      isLoading: false,
       content: [{ test: 'test2' }],
     });
   });
@@ -63,6 +69,7 @@ describe('SearchGifs Reducer', () => {
 
     expect(reducer(initialState, successAction)).toEqual({
       ...initialState,
+      isLoading: false,
       searchedGif: { test: 'test3' },
     });
   });
