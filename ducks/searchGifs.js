@@ -1,4 +1,5 @@
 import { takeEvery, call, put } from 'redux-saga/effects';
+import { handleActions } from 'redux-actions';
 import GifsApi from '../services/gifs-api';
 import formatter from '../services/formatter';
 
@@ -20,22 +21,35 @@ const INITIAL_STATE = {
 };
 
 // Reducer
-export default (state = {}, action = {}) => {
-  switch (action.type) {
-    case GIF_SEARCH_REQUEST:
-      return { ...state, isLoading: true };
-    case GIF_SEARCH_BY_QUERY_SUCCESS:
-      return { ...state, isLoading: false, content: action.payload };
-    case GIF_SEARCH_FAILURE:
-      return { ...INITIAL_STATE, isFailure: true, isLoading: false };
-    case GIF_TRENDING_SUCCESS:
-      return { ...state, isLoading: false, content: action.payload };
-    case GIF_SEARCH_BY_ID_SUCCESS:
-      return { ...state, isLoading: false, searchedGif: action.payload };
-    default:
-      return { ...INITIAL_STATE };
-  }
-};
+export default handleActions(
+  {
+    [GIF_SEARCH_REQUEST]: state => ({
+      ...state,
+      isLoading: true,
+    }),
+    [GIF_SEARCH_BY_QUERY_SUCCESS]: (state, action) => ({
+      ...state,
+      isLoading: false,
+      content: action.payload,
+    }),
+    [GIF_SEARCH_FAILURE]: () => ({
+      ...INITIAL_STATE,
+      isFailure: true,
+      isLoading: false,
+    }),
+    [GIF_TRENDING_SUCCESS]: (state, action) => ({
+      ...state,
+      isLoading: false,
+      content: action.payload,
+    }),
+    [GIF_SEARCH_BY_ID_SUCCESS]: (state, action) => ({
+      ...state,
+      isLoading: false,
+      searchedGif: action.payload,
+    }),
+  },
+  { ...INITIAL_STATE }
+);
 
 // Action Creators
 export const searchRequest = () => ({

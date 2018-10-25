@@ -53,7 +53,7 @@ class HoverPreview extends React.PureComponent {
   }
 }
 
-const ImageWrapper = styled.div`
+const ImageWrapper = styled.a`
   padding: 0px;
   display: flex;
   justify-content: center;

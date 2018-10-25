@@ -11,10 +11,7 @@ export const NavbarItem = ({ name, link }) => (
 );
 
 const StyledNavbarItem = styled.span`
-  padding-left: 15px;
-  padding-right: 15px;
-  padding-top: 10px;
-  padding-bottom: 10px;
+  padding: 10px 15px 10px 15px;
   margin-left: 10px;
   margin-right: 10px;
   cursor: pointer;

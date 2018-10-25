@@ -23,6 +23,7 @@ const StyledNavbar = styled.div`
 `;
 
 const StyledTitle = styled.p`
+  padding: 10px 15px 10px 15px;
   font-size: 22px;
   justify-self: flex-start;
   margin: 0px;
@@ -33,7 +34,9 @@ const StyledTitle = styled.p`
 `;
 
 const StyledNavigation = styled.div`
+  justify-self: flex-end;
   display: flex;
+  justify-content: center;
   flex-wrap: wrap;
 `;
 

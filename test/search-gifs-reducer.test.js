@@ -12,10 +12,6 @@ describe('SearchGifs Reducer', () => {
     expect(reducer(undefined, {})).toEqual(initialState);
   });
 
-  it('should return initial state when action is undefined', () => {
-    expect(reducer()).toEqual(initialState);
-  });
-
   it('should handle GIF_SEARCH_REQUEST', () => {
     expect(reducer(initialState, { type: 'GIF_SEARCH_REQUEST' })).toEqual({
       ...initialState,
