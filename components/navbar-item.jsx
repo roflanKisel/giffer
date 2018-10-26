@@ -12,8 +12,6 @@ export const NavbarItem = ({ name, link }) => (
 
 const StyledNavbarItem = styled.span`
   padding: 10px 15px 10px 15px;
-  margin-left: 10px;
-  margin-right: 10px;
   cursor: pointer;
   color: white;
   font-size: 19px;

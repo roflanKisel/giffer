@@ -6,11 +6,16 @@ exports[`SearchLine SearchLine DUMB component should renders correctly errors 1`
     <h1>
       Explore
     </h1>
-    <search-line__StyledInput
+    <DebounceInput
+      debounceTimeout={700}
+      element={[Function]}
+      forceNotifyByEnter={true}
+      forceNotifyOnBlur={true}
+      minLength={2}
       onChange={[Function]}
-      onKeyPress={[Function]}
-      placeholder="Type something and press enter"
-      value=""
+      placeholder="Type something"
+      type="text"
+      value="search query"
     />
   </search-line__SearchLineWrapper>
 </search-line__StyledSearchLine>

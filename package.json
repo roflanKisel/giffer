@@ -7,7 +7,8 @@
     "dev": "node server.js",
     "build": "next build",
     "start": "NODE_ENV=production node server.js",
-    "test": "jest"
+    "test": "jest",
+    "lint": "eslint *.js"
   },
   "jest": {
     "setupFiles": [
@@ -29,6 +30,7 @@
     "next-routes": "^1.4.2",
     "prop-types": "^15.6.2",
     "react": "^16.5.2",
+    "react-debounce-input": "^3.2.0",
     "react-dom": "^16.5.2",
     "react-redux": "^5.0.7",
     "recompose": "^0.30.0",

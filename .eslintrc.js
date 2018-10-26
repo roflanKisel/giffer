@@ -7,6 +7,7 @@ module.exports = {
     'prettier/prettier': ['error'],
     'react/destructuring-assignment': false,
     'jsx-a11y/anchor-is-valid': false,
+    'import/no-extraneous-dependencies': false,
   },
   env: {
     browser: true,

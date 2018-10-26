@@ -6,7 +6,7 @@ export const Navbar = () => (
   <StyledNavbar>
     <StyledTitle>Giffer</StyledTitle>
     <StyledNavigation>
-      <NavbarItem name="Home" link="/" />
+      <NavbarItem name="Trending" link="/" />
       <NavbarItem name="About" link="/about" />
     </StyledNavigation>
   </StyledNavbar>

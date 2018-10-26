@@ -1,48 +1,31 @@
-import React, { PureComponent } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
+import { DebounceInput } from 'react-debounce-input';
 
-export class SearchLine extends PureComponent {
-  static propTypes = {
-    handleSearchByQuery: PropTypes.func.isRequired,
-  };
+const StyledInput = styled.input`
+  width: calc(100% - 10px);
+  height: 50px;
+  font-size: 30px;
+  padding-left: 10px;
+  margin: 0px;
+`;
 
-  state = {
-    inputText: '',
-  };
-
-  handleInputChange = event => {
-    this.setState({
-      inputText: event.target.value,
-    });
-  };
-
-  performSearch = event => {
-    if (event.key === 'Enter') {
-      const { handleSearchByQuery } = this.props;
-
-      handleSearchByQuery({ searchQuery: this.state.inputText });
-    }
-  };
-
-  render() {
-    const { inputText } = this.state;
-
-    return (
-      <StyledSearchLine>
-        <SearchLineWrapper>
-          <h1>Explore</h1>
-          <StyledInput
-            value={inputText}
-            onChange={this.handleInputChange}
-            onKeyPress={this.performSearch}
-            placeholder="Type something and press enter"
-          />
-        </SearchLineWrapper>
-      </StyledSearchLine>
-    );
-  }
-}
+const SearchLine = ({ searchQuery, onSearchQueryChange }) => (
+  <StyledSearchLine>
+    <SearchLineWrapper>
+      <h1>Explore</h1>
+      <DebounceInput
+        element={StyledInput}
+        minLength={2}
+        debounceTimeout={700}
+        value={searchQuery}
+        onChange={onSearchQueryChange}
+        placeholder="Type something"
+      />
+    </SearchLineWrapper>
+  </StyledSearchLine>
+);
 
 const StyledSearchLine = styled.div`
   width: 100%;
@@ -57,12 +40,9 @@ const SearchLineWrapper = styled.div`
   width: 90%;
 `;
 
-const StyledInput = styled.input`
-  width: calc(100% - 10px);
-  height: 50px;
-  font-size: 30px;
-  padding-left: 10px;
-  margin: 0px;
-`;
+SearchLine.propTypes = {
+  searchQuery: PropTypes.string.isRequired,
+  onSearchQueryChange: PropTypes.func.isRequired,
+};
 
 export default SearchLine;

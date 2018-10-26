@@ -8,7 +8,7 @@ exports[`Navbar should renders correctly 1`] = `
   <navbar__StyledNavigation>
     <onlyUpdateForKeys(NavbarItem)
       link="/"
-      name="Home"
+      name="Trending"
     />
     <onlyUpdateForKeys(NavbarItem)
       link="/about"
