@@ -1,6 +1,6 @@
 import React from 'react';
 import { shallow, mount } from 'enzyme';
-import { SearchLine } from '../components/search-line';
+import SearchLine from '../components/search-line';
 
 describe('SearchLine', () => {
   describe('SearchLine DUMB component', () => {
