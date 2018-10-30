@@ -14,7 +14,7 @@ const StyledInput = styled.input`
 const SearchLine = ({ searchQuery, onSearchQueryChange }) => (
   <StyledSearchLine>
     <SearchLineWrapper>
-      <h1>Explore</h1>
+      <SearchLineHeader>Explore</SearchLineHeader>
       <DebounceInput
         element={StyledInput}
         minLength={2}
@@ -26,6 +26,12 @@ const SearchLine = ({ searchQuery, onSearchQueryChange }) => (
     </SearchLineWrapper>
   </StyledSearchLine>
 );
+
+const SearchLineHeader = styled.div`
+  font-size: 30px;
+  font-weight: bold;
+  margin: 10px 0px 5px 0px;
+`;
 
 const StyledSearchLine = styled.div`
   width: 100%;

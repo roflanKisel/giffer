@@ -12,6 +12,9 @@ const formatOriginalGif = gif => ({
   url: gif.images.original.url,
   height: gif.images.original.height,
   width: gif.images.original.width,
+  slug: gif.slug,
+  username: gif.username,
+  rating: gif.rating,
 });
 
 export default {

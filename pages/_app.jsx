@@ -35,7 +35,7 @@ injectGlobal`
   body {
     margin: 0px;
     font-family: Roboto;
-  }
+  },
 `;
 
 export default compose(

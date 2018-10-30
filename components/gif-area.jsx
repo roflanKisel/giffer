@@ -9,6 +9,8 @@ const GifArea = ({ gif }) => (
     {gif && (
       <StyledImageWrapper>
         <StyledImage src={gif.url} height={gif.height} width={gif.width} />
+        <StyledText>Username: {gif.username}</StyledText>
+        <StyledText>Rating: {gif.rating}</StyledText>
       </StyledImageWrapper>
     )}
   </div>
@@ -26,10 +28,16 @@ GifArea.propTypes = {
   }),
 };
 
+const StyledText = styled.div`
+  font-size: 22px;
+  margin: 5px 0px 5px 0px;
+`;
+
 const StyledImageWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
   margin-top: 20px;
   padding: 20px;
 `;

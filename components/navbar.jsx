@@ -24,10 +24,9 @@ const StyledNavbar = styled.div`
 
 const StyledTitle = styled.p`
   padding: 10px 15px 10px 15px;
-  font-size: 22px;
+  font-size: 19px;
   justify-self: flex-start;
   margin: 0px;
-  margin-left: 5px;
   font-weight: bold;
   color: white;
   user-select: none;
